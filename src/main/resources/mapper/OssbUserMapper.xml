@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ths.ossb.dao.OssbUserDao" >
+    <sql id="BASE_TABLE">
+        ossb_user
+    </sql>
+
+    <sql id="BASE_COLUMN">
+        id,name,salary
+    </sql>
+
+    <update id="updateUserInfo" parameterType="com.ths.ossb.model.OssbUser">
+        UPDATE
+          <include refid="BASE_TABLE"/>
+        <set>
+            <if test="name != null">
+                name = #{name, jdbcType=VARCHAR},
+            </if>
+            <if test="salary != null">
+                salary = #{salary, jdbcType=VARCHAR},
+            </if>
+        </set>
+        WHERE id = #{id, jdbcType=INTEGER}
+    </update>
+
+    <select id="getUserInfoById" resultType="com.ths.ossb.model.OssbUser">
+        SELECT
+        <include refid="BASE_COLUMN"/>
+        FROM
+        <include refid="BASE_TABLE"/>
+        WHERE
+        id = #{id, jdbcType=INTEGER}
+    </select>
+
+    <select id="getUserInfoByCond" resultType="com.ths.ossb.model.OssbUser">
+        SELECT
+        <include refid="BASE_COLUMN"/>
+        FROM
+        <include refid="BASE_TABLE"/>
+        <where>
+            <if test="name != null">
+                AND name = #{name, jdbcType=VARCHAR}
+            </if>
+            <if test="salary != null">
+                AND salary = #{salary, jdbcType=VARCHAR}
+            </if>
+        </where>
+    </select>
+
+
+</mapper>
