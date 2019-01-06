@@ -19,7 +19,7 @@ public class OssbFilter extends OncePerRequestFilter {
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
 			throws ServletException, IOException {
-		log.info("enter OssbFilter");
+		//log.info("enter OssbFilter");
 		filterChain.doFilter(request, response);
 	}
 

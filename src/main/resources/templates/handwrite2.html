@@ -1,0 +1,126 @@
+<html lang="zh-CN">
+
+<script src="/js/hw.js"></script>
+<style>
+.ita-kd-img {
+    background-image: url(https://ssl.gstatic.com/inputtools/images/ita_sprite7.png);
+	background-image: -webkit-image-set(url(https://ssl.gstatic.com/inputtools/images/ita_sprite7.png) 1x,url(https://ssl.gstatic.com/inputtools/images/ita_sprite7_2x.png) 2x);
+    background-repeat: no-repeat;
+}
+.ita-hwt-ime{overflow:hidden;width:425px;height:297px;background:#ffffff}
+.ita-hwt-ime-st{position:fixed;opacity:0.5;box-shadow:0px 4px 16px rgba(0,0,0,0.2);border:1px solid rgb(204,204,204);-webkit-transition:opacity 0.1s linear;z-index:2147483640}
+.ita-hwt-ime-full{width:auto!important;left:2px!important;right:2px!important}
+.ita-hwt-ime-opaque{opacity:0.99!important}
+.ita-hwt-ime-init-opaque{opacity:0.99!important}
+.ita-hwt-ime-hover{opacity:0.99;-webkit-transition:opacity 0.1s linear;-moz-transition:opacity 0.1s linear;-o-transition:opacity 0.1s linear;transition:opacity 0.1s linear}
+canvas.ita-hwt-canvas{cursor:url('https://ssl.gstatic.com/inputtools/images/pencil.png') 0 10,auto;vertical-align:bottom;touch-action:none}
+.ita-hwt-grip{position:absolute;cursor:move;top:0}
+.ita-hwt-ltr .ita-hwt-grip{left:0}
+.ita-hwt-rtl .ita-hwt-grip{right:0}
+.ita-hwt-close{background-position:-660px -10px;background-color:white;width:30px;height:30px;position:absolute;top:0;cursor:pointer}
+.ita-hwt-ltr .ita-hwt-close{right:0}
+.ita-hwt-rtl .ita-hwt-close{left:0}
+.ita-hwt-candidates{border-top:1px solid rgb(204,204,204);background:#fff;text-align:left;white-space:nowrap}
+.ita-hwt-candidate{display:inline-block;white-space:nowrap;height:32px;line-height:24px;padding:6px 18px 3px 18px;border-right:1px solid rgb(204,204,204);font-family:arial,verdana,sans-serif;font-size:small;color:#222;cursor:pointer}
+.ita-hwt-selected{color:#444}
+.ita-hwt-candidate-hover{background-color:#f0f0f0;color:#444}
+.ita-hwt-candidate:active{background-color:#e0e0e0;color:#444}
+.ita-hwt-disabled{opacity:0.5}
+.ita-hwt-buttons{background-color:#f0f0f0;height:60px;border-top:1px solid rgb(204,204,204)}
+.ita-hwt-button{display:inline-block;vertical-align:top}
+.ita-hwt-backspace{margin:10px;width:24px!important;height:40px!important}
+.ita-hwt-backspace-img{background-position:-714px -118px;width:18px;height:14px;margin:13px 4px 13px 4px}
+.ita-hwt-space{margin:10px 0 10px 0;height:24px;width:286px;line-height:24px;padding:8px 0px 8px 0px!important;font-family:arial,verdana,sans-serif;font-size:small;text-align:center}
+.ita-hwt-enter{margin:10px;width:24px!important;height:40px!important}
+.ita-hwt-enter-img{margin:13px 4px 13px 4px}
+.ita-hwt-language{position:absolute;right:0px;bottom:0px;width:auto;height:auto;font-size:small;color:#7590d4}
+.ita-hwt-clear-time{position:absolute;right:30px;bottom:0px;width:auto;height:auto;font-size:small;color:#7590d4;cursor:pointer}
+.ita-hwt-insert-time{position:absolute;right:60px;bottom:0px;width:auto;height:auto;font-size:small;color:#7590d4;cursor:pointer}
+.ita-hwt-enter-img-dark{background-position:-768px -120px;width:14px;height:10px}
+.ita-hwt-enter-img-white{background-position:-818px -120px;width:14px;height:10px}
+.ita-hwt-grip{background-position:-700px -160px;width:47px;height:29px}
+.ita-hwt-grip-hover{background-position:-650px -160px}
+.ita-hwt-grip:active{background-position:-600px -160px}
+.ita-hwt-jfk{-webkit-border-radius:2px;-moz-border-radius:2px;border-radius:2px;cursor:default;font-size:11px;font-weight:bold;text-align:center;white-space:nowrap;padding:0 8px}
+.ita-hwt-jfk-hover{-webkit-box-shadow:0 1px 1px rgba(0,0,0,.1);-moz-box-shadow:0 1px 1px rgba(0,0,0,.1);box-shadow:0 1px 1px rgba(0,0,0,.1)}
+.ita-hwt-jfk-standard{-webkit-box-shadow:none;-moz-box-shadow:none;box-shadow:none;background-color:#f5f5f5;background-image:-webkit-linear-gradient(top,#f5f5f5,#f1f1f1);background-image:-moz-linear-gradient(top,#f5f5f5,#f1f1f1);background-image:-ms-linear-gradient(top,#f5f5f5,#f1f1f1);background-image:-o-linear-gradient(top,#f5f5f5,#f1f1f1);background-image:linear-gradient(top,#f5f5f5,#f1f1f1);color:#444;border:1px solid #dcdcdc;border:1px solid rgba(0,0,0,0.1)}
+.ita-hwt-jfk-standard.ita-hwt-jfk-hover{-webkit-box-shadow:none;-moz-box-shadow:none;box-shadow:none;background-color:#f8f8f8;background-image:-webkit-linear-gradient(top,#f8f8f8,#f1f1f1);background-image:-moz-linear-gradient(top,#f8f8f8,#f1f1f1);background-image:-ms-linear-gradient(top,#f8f8f8,#f1f1f1);background-image:-o-linear-gradient(top,#f8f8f8,#f1f1f1);background-image:linear-gradient(top,#f8f8f8,#f1f1f1);border:1px solid #c6c6c6;color:#333}
+.ita-hwt-jfk-action{-webkit-box-shadow:none;-moz-box-shadow:none;box-shadow:none;background-color:#4d90fe;background-image:-webkit-linear-gradient(top,#4d90fe,#4787ed);background-image:-moz-linear-gradient(top,#4d90fe,#4787ed);background-image:-ms-linear-gradient(top,#4d90fe,#4787ed);background-image:-o-linear-gradient(top,#4d90fe,#4787ed);background-image:linear-gradient(top,#4d90fe,#4787ed);border:1px solid #3079ed;color:#fff}
+.ita-hwt-jfk-action.ita-hwt-jfk-hover{-webkit-box-shadow:none;-moz-box-shadow:none;box-shadow:none;background-color:#357ae8;background-image:-webkit-linear-gradient(top,#4d90fe,#357ae8);background-image:-moz-linear-gradient(top,#4d90fe,#357ae8);background-image:-ms-linear-gradient(top,#4d90fe,#357ae8);background-image:-o-linear-gradient(top,#4d90fe,#357ae8);background-image:linear-gradient(top,#4d90fe,#357ae8);border:1px solid #2f5bb7;border-bottom-color:#2f5bb7}
+.ita-hwt-butterbar{position:absolute;left:0;bottom:100px;-webkit-border-radius:2px;-moz-border-radius:2px;border-radius:2px;-webkit-box-shadow:0px 2px 4px rgba(0,0,0,0.2);-moz-box-shadow:0px 2px 4px rgba(0,0,0,0.2);box-shadow:0px 2px 4px rgba(0,0,0,0.2);-webkit-transition:all 0 linear 1s,opacity 1s;-moz-transition:all 0 linear 1s,opacity 1s;-o-transition:all 0 linear 1s,opacity 1s;transition:all 0 linear 1s,opacity 1s;border-style:solid;border-width:0;font-size:11px;height:0;opacity:0;visibility:hidden;overflow:hidden;padding:0;margin:10px;text-align:center;background-color:#f9edbe;border-color:#f0c36d;color:#333}
+.ita-hwt-butterbar.shown{-webkit-transition:opacity 0.218s;-moz-transition:opacity 0.218s;-o-transition:opacity 0.218s;transition:opacity 0.218s;border-width:1px;height:14px;opacity:1;visibility:visible;padding:2px 16px}
+.ita-hwt-result-textarea{
+    min-height: 80px;
+    padding-top: 20px;
+    font-family: 'Roboto',arial,sans-serif;
+    font-size: 24px;
+    line-height: 32px;
+    padding-left: 28px;
+    padding-right: 28px;
+	width: 360px;
+}
+.ita-hwt-pen{background-position:-60px -10px;background-color:white;width:30px;height:30px;position:absolute;bottom:0;right:0;cursor:pointer}
+.ita-hwt-speech{background-position:-160px -210px;background-color:white;width:30px;height:30px;position:absolute;bottom:0;right:31;cursor:pointer}
+.ita-hwt-ime-control{
+	overflow:hidden;width:425px;height:90px;background:#ffffff
+}
+</style>
+
+<div  class=" ita-hwt-ime-control ita-hwt-ltr notranslate ita-hwt-ime-st ita-hwt-ime-init-opaque"
+ tabindex="-1" style="user-select: none; left: 2px; top: 110px;">
+	<div >
+			<textarea id="source" class="ita-hwt-result-textarea" rows="1" spellcheck="false" autocapitalize="off" autocomplete="off" autocorrect="off" style="overflow: auto hidden; box-sizing: border-box; height: 50px; direction: ltr; padding-bottom: 18px;">
+			</textarea>
+	</div>
+	<div class="ita-kd-img ita-hwt-pen" style="user-select: none;"></div>
+	<div class="ita-kd-img ita-hwt-speech"  style="user-select: none;"></div>
+</div>
+
+<div  class=" ita-hwt-ime ita-hwt-ltr notranslate ita-hwt-ime-st ita-hwt-ime-init-opaque"
+ tabindex="-1" style="user-select: none; left: 2px; top: 200px; display:none;">
+
+ <div  tabindex="-1" style="user-select: none;">
+		<canvas class="ita-hwt-canvas" id="canvas"  width="425" height="194" style="width: 425px; height: 194px; user-select: none;"></canvas>
+	</div>
+
+	<div class="ita-hwt-candidates" tabindex="-1" style="user-select: none;">
+		<div class="ita-hwt-candidate">，</div>
+		<div class="ita-hwt-candidate">。</div>
+		<div class="ita-hwt-candidate">？</div>
+		<div class="ita-hwt-candidate">！</div>
+		<div class="ita-hwt-candidate">：</div>
+		<div class="ita-hwt-candidate">「</div>
+		<div class="ita-hwt-candidate">」</div>
+	<div class="ita-hwt-candidate">；</div>
+</div>
+
+
+	<div class="ita-hwt-butterbar" style="user-select: none;">Move cursor to a text field before you click a candidate</div>
+	<div class="ita-kd-img ita-hwt-close" style="user-select: none;"></div>
+	<div class="ita-kd-img ita-hwt-grip" hwmode="small" style="user-select: none;"></div>
+
+
+	<div class="ita-hwt-buttons" tabindex="-1" style="user-select: none;">
+		<div class="ita-hwt-button ita-hwt-jfk ita-hwt-jfk-standard ita-hwt-backspace" style="user-select: none;">
+			<div class="ita-hwt-backspace-img ita-kd-img" style="user-select: none;"></div>
+		</div>
+		<div class="ita-hwt-button ita-hwt-jfk ita-hwt-jfk-standard ita-hwt-space" style="user-select: none; width=297px;">日本語</div>
+		<div class="ita-hwt-button ita-hwt-jfk ita-hwt-enter ita-hwt-jfk-action" style="user-select: none;">
+			<div class="ita-hwt-enter-img ita-hwt-enter-img-dark ita-kd-img ita-hwt-enter-img-white" style="user-select: none;"></div>
+		</div>
+	</div>
+
+<!--
+		<div class="ita-hwt-buttons" tabindex="-1" style="user-select: none;">
+			<div class="ita-hwt-button ita-hwt-jfk ita-hwt-jfk-standard ita-hwt-backspace" style="user-select: none;">
+				<div class="ita-hwt-backspace-img ita-kd-img" style="user-select: none;"></div>
+			</div>
+			<div class="ita-hwt-button ita-hwt-jfk ita-hwt-jfk-standard ita-hwt-space" style="user-select: none;">日本語</div>
+			<div class="ita-hwt-button ita-hwt-jfk ita-hwt-jfk-standard ita-hwt-enter" style="user-select: none;">
+				<div class="ita-hwt-enter-img ita-hwt-enter-img-dark ita-kd-img" style="user-select: none;"></div>
+			</div>
+		</div>
+-->
+
+</div>
+</html>

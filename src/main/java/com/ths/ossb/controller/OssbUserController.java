@@ -10,13 +10,13 @@ import com.ths.ossb.service.OssbUserService;
 
 @RestController
 @RequestMapping("/ossbuser")
-public class OssbUserCOntroller extends BaseController{
+public class OssbUserController extends BaseController{
 
 	@Autowired
 	private OssbUserService ossbUserService;
 
-	@RequestMapping("/getossbuser/{id}")
-	public OssbUser getPostListByUserId(@PathVariable String id){
+	@RequestMapping("/getOssbUserById/{id}")
+	public OssbUser getOssbUserById(@PathVariable String id){
 
 		OssbUser ossbUser = ossbUserService.getUserInfoById(Integer.parseInt(id));
 		return ossbUser;

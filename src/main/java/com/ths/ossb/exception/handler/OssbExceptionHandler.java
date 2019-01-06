@@ -19,7 +19,7 @@ public class OssbExceptionHandler extends BaseController{
     @ExceptionHandler(TokenExpiredException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public Object handlerTokenExpiredException(TokenExpiredException e){
-        log.error("token is expired.",e);
+        //log.error("token is expired.",e);
         return this.ajaxFailureResponse("oken is expired。");
     }
 

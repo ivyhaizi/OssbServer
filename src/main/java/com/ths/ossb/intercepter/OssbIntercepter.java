@@ -23,7 +23,7 @@ public class OssbIntercepter implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object o) throws Exception {
-    	log.info("enter OssbIntercepter");
+    	//log.info("enter OssbIntercepter");
     	return true;
     }
 

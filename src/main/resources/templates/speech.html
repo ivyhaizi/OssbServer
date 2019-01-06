@@ -1,0 +1,116 @@
+<html>
+<head>
+   <title>Microsoft Cognitive Service Speech </title>
+</head>
+<body>
+ <div id="warning">
+    <h1 style="font-weight:500;">Speech To Text sdk is invalid!!!</h1>
+  </div>
+  
+  <div id="content" style="display:none">
+    <table width="100%">
+      <tr>
+        <td></td>
+        <td><button id="startRecognizeOnceAsyncButton">Start recognition</button></td>
+      </tr>
+      <tr>
+        <td align="right" valign="top">Results</td>
+        <td><textarea id="phraseDiv" style="display: inline-block;width:500px;height:200px"></textarea></td>
+      </tr>
+    </table>
+  </div>
+ <!-- SDK reference goes here -->
+ <script src="/js/microsoft.cognitiveservices.speech.sdk.bundle.js"></script>
+
+<!-- Speech SDK USAGE -->
+<script>
+    // status fields and start button in UI
+    var phraseDiv;
+    var startRecognizeOnceAsyncButton;
+  
+    var authorizationToken;
+    var SpeechSDK;
+    var recognizer;
+    //var serviceRegion;
+
+    var authorizationEndpoint = "/speech/gettoken";
+  debugger
+  function RequestAuthorizationToken() {
+    if (authorizationEndpoint) {
+      var a = new XMLHttpRequest();
+      a.open("GET", authorizationEndpoint);
+      a.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+      a.send("");
+      a.onload = function() {
+          //var token = JSON.parse(atob(this.responseText.split(".")[1]));
+          //serviceRegion.value = token.region;
+          authorizationToken = this.responseText;
+          //console.log("Got an authorization token: " + token);
+      }
+    }
+  }
+  
+    document.addEventListener("DOMContentLoaded", function () {
+      startRecognizeOnceAsyncButton = document.getElementById("startRecognizeOnceAsyncButton");
+      phraseDiv = document.getElementById("phraseDiv");
+
+      if (!!window.SpeechSDK) {
+        SpeechSDK = window.SpeechSDK;
+        startRecognizeOnceAsyncButton.disabled = false;
+
+        document.getElementById('content').style.display = 'block';
+        document.getElementById('warning').style.display = 'none';
+
+        if (typeof RequestAuthorizationToken === "function") {
+            RequestAuthorizationToken();
+        }
+      }
+
+      startRecognizeOnceAsyncButton.addEventListener("click", function () {
+        startRecognizeOnceAsyncButton.disabled = true;
+        phraseDiv.innerHTML = "";
+  
+        // if we got an authorization token, use the token. 
+        var speechConfig;
+        if (authorizationToken) {
+          speechConfig = SpeechSDK.SpeechConfig.fromAuthorizationToken(authorizationToken, "eastasia");
+        } else {
+            alert("invalid token");
+            return;
+        }
+  
+        speechConfig.speechRecognitionLanguage = "ja-JP";
+        var audioConfig  = SpeechSDK.AudioConfig.fromDefaultMicrophoneInput();
+        recognizer = new SpeechSDK.SpeechRecognizer(speechConfig, audioConfig);
+  
+        recognizer.recognizeOnceAsync(
+          function (result) {
+            startRecognizeOnceAsyncButton.disabled = false;
+            phraseDiv.innerHTML += result.text;
+            window.console.log(result);
+  
+            recognizer.close();
+            recognizer = undefined;
+          },
+          function (err) {
+            debugger
+            startRecognizeOnceAsyncButton.disabled = false;
+            phraseDiv.innerHTML += err;
+            window.console.log(err);
+  
+            recognizer.close();
+            recognizer = undefined;
+
+            if (typeof RequestAuthorizationToken === "function") {
+                RequestAuthorizationToken();
+            }
+          });
+      });
+
+    });
+  
+  debugger
+
+  </script>
+</body>
+</html>
